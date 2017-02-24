@@ -1,18 +1,20 @@
 //@import url('https://fonts.googleapis.com/css?family=Open+Sans');
-//@import url('https://fonts.googleapis.com/css?family=Roboto');
 @import url('https://fonts.googleapis.com/css?family=Lato');
 
-$childNodeSize: 140px;
-$currentNodeSize: 210px;
-$parentNodeSize: 100px;
-$currentNodeTopMargin: 0.2;
+//must set to same values at top of js
+$childDtSize: 140px;
+$currentDtSize: 210px;
+$parentDtSize: 100px;
+$currentDtTopMargin: 0.2;
 $currentDdVertOffset: 0.48;
 
+$wider-than-phone: "(min-width: 600px)";
 $orange: #fc5300;
 $clickableNode: $orange;
 $offWhite: #ffffff;
 $veryVeryDarkGray: #222222;
 $bgGrey: #666666;
+$relborderRadius: 1;
 
 @mixin border-radius($radius) {
   -webkit-border-radius: $radius;
@@ -21,28 +23,26 @@ $bgGrey: #666666;
           border-radius: $radius;
 }
 
-@mixin shown-dt($diameter) {  //governs appearance of visible nodes
-  @include border-radius($diameter);
+@mixin shown-dt($diameter, $heightFromTop) {  //governs appearance of visible nodes
+  @include border-radius($diameter*$relborderRadius);
   display:block;
   color:$offWhite;
   text-align:left;
   padding-left:($diameter*0.1);
   width:($diameter*0.9);
-  padding-top:($diameter*0.3);
-  height:($diameter*0.7);
+  padding-top:($diameter*$heightFromTop);
+  height:($diameter*(1-$heightFromTop));
 }
 
 @mixin traverse-transition($traverseTime) {  //when moving between nodes
-  transition-property: padding-top, height, width, top, left, background-color, font-size;
-  transition-duration: $traverseTime/2, $traverseTime, $traverseTime, $traverseTime, $traverseTime, $traverseTime, $traverseTime;
+  transition-property: padding-top, height, width, top, left, background-color, font-size, border-radius;
+  transition-duration: $traverseTime, $traverseTime, $traverseTime, $traverseTime, $traverseTime, $traverseTime, $traverseTime, $traverseTime;
 }
 
 body {
   margin:0;
   color:$veryVeryDarkGray;
   background-color:$offWhite*0.9;
-  //font-family:'Open Sans',arial,sans,sans-serif;
-  font-family:'Roboto',arial,sans,sans-serif;
   font-family:'Lato',arial,sans,sans-serif;
 }  
 
@@ -62,7 +62,7 @@ noscript {
 }
 
 button {
-  background-color:$orange;
+  background-color:$clickableNode;
   color:$offWhite;
   border:1px solid $clickableNode*2;
   border-radius:0.4em;
@@ -79,117 +79,122 @@ button {
 
 }
 
-article {
+#nav-article {
   position:relative;
   padding:20px;
   background-color:$offWhite*0.83;
   transition-property: height;
   transition-duration: 0.8s;
-}
 
-dl {
-  position:absolute;
-  top:0;
-  left:0;
-  margin:0;
-}
+  & dl {
+    position:absolute;
+    top:0;
+    left:0;
+    margin:0;
+  }
 
-dl.top {
-  left:50%;
-  margin-left:-(($currentNodeSize+$childNodeSize)/2);
-}
+  & dl.top {
+    left:50%;
+    margin-left:-(($currentDtSize+$childDtSize)/2);
+  }
 
-dt {
-  position:absolute;
-  @include traverse-transition(1s);
-  font-weight:600;
-  visibility:hidden;
-  margin:0;
-  top:0;
-  left:0;
-}
+  & dt {
+    position:absolute;
+    @include traverse-transition(1s);
+    font-weight:600;
+    visibility:hidden;
+    margin:0;
+    top:0;
+    left:0;
+  }
 
-dd {
-  font-size:1em;
-  position:absolute;
-  @include traverse-transition(1s);
-  visibility:hidden;
-  margin:0;
-  z-index:100;
-  text-align:left;
-  color:$offWhite;
-  width:$childNodeSize;
-  top:0;
-  left:0;
-  padding-left:0.5em;
-  margin-right:1em;
-}
+  & dd {
+    font-size:1em;
+    position:absolute;
+    @include traverse-transition(1s);
+    visibility:hidden;
+    margin:0;
+    z-index:100;
+    text-align:left;
+    color:$offWhite;
+    width:$childDtSize;
+    top:0;
+    left:0;
+    padding-left:0.5em;
+    margin-right:1em;
+  }
 
-dt.current-node {
-  visibility:visible;
-  @include shown-dt($currentNodeSize);
-  background-color:$bgGrey;
-  border: 1px solid $bgGrey*1.4;
-  top:$currentNodeSize*$currentNodeTopMargin;
-  left:$currentNodeSize*0.1;
-  z-index:40;
-  font-size:2em;
-}
+  & dt.current-node {
+    visibility:visible;
+    @include shown-dt($currentDtSize, 0.4);
+    background-color:$bgGrey;
+    border: 1px solid $bgGrey*1.4;
+    top:$currentDtSize*$currentDtTopMargin;
+    left:$currentDtSize*0.1;
+    z-index:40;
+    font-size:2em;
+  }
 
-dt.current-node + dd {
-  visibility:visible;
-  top:$currentNodeSize*($currentNodeTopMargin+$currentDdVertOffset);
-  left:$currentNodeSize*0.1;
-}
+  & dt.current-node + dd {
+    visibility:visible;
+    top:$currentDtSize*($currentDtTopMargin+$currentDdVertOffset+0.1);
+    //issue here
+    left:$currentDtSize*0.15;
+    width:$currentDtSize*0.8;
 
-dt.parent-node {
-  visibility:visible;
-  @include shown-dt($parentNodeSize);
-  cursor:pointer;
-  background-color:$clickableNode;
-  border: 1px solid $clickableNode*1.1;
-  position:absolute;
-  top:0;
-  left:0;
-}
+  }
 
-/*
-dt.parent-node + dd {
-  visibility:visible;
-  top:$childNodeSize*0.4;
-  left:0;
-  cursor:pointer;
-}
-*/
+  & dt.parent-node {
+    visibility:visible;
+    @include shown-dt($parentDtSize, 0.3);
+    cursor:pointer;
+    background-color:$clickableNode;
+    border: 1px solid $clickableNode*1.1;
+    position:absolute;
+    top:0;
+    left:0;
+    @media #{$wider-than-phone} {
+      left: -$parentDtSize/4;
+    }
 
-dt.parent-node + dd {
-  top:$childNodeSize*0.4;
-  left:0;
-  cursor:pointer;
-}
+  }
 
-dt.child-node {
-  left:$childNodeSize;
-  @include shown-dt($childNodeSize);
-  background-color:$clickableNode;
-  cursor:pointer;
-  border:1px solid $clickableNode*2;
-  visibility:visible;
-  z-index:150;
-}
+  & dt.parent-node + dd {
+    top:$childDtSize*0.4;
+    left:0;
 
-dt.child-node + dd {
-  visibility:visible;
-  display:inline-block;
-  z-index:200;
-  left:$childNodeSize;
-  cursor:pointer;
-}
+    cursor:pointer;
+  }
 
-dt.leaf-node, dt.leaf-node + dd {
-  cursor:default;
-}
+  & dt.child-node {
+    left:$childDtSize;
+    @media #{$wider-than-phone} {
+      left: $parentDtSize*2;
+    }
+    @include shown-dt($childDtSize, 0.3);
+    background-color:$clickableNode;
+    cursor:pointer;
+    border:1px solid $clickableNode*2;
+    visibility:visible;
+    z-index:150;
+  }
 
+  & dt.child-node + dd {
+    left:$childDtSize;
+    @media #{$wider-than-phone} {
+      left: $parentDtSize*2;
+    }
+    visibility:visible;
+    display:inline-block;
+    z-index:200;
+    cursor:pointer;
+  }
+
+  & dt.leaf-node, dt.leaf-node + dd {
+    cursor:default;
+  }
+}
+  
 article.no-js {  //if js disabled
   & * {
   position:relative;

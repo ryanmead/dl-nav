@@ -1,50 +1,45 @@
-<header class="no-js">
+<header class="no-js" id="nav-header">
   <button id="top-home">home</button>
 </header>
-
-<article class="no-js">
-<dl class="top">
-  <dt>SITE TREE</dt>
-  <dd>for a content-light page that just links to other resources
+<article class="no-js" id="nav-article">
+<dl class="top" id="nav-dl">
+  <dt>DL NAV</dt>
+  <dd>Animate a text-light nested &lt;DL&gt; tree
   <dl>
     <dt>features</dt>
-    <dd>something
+    <dd>
       <dl>
-        <dt>feature 1</dt>
-        <dd>falls back to a regular-looking dl if javascript disabled</dd>
-        <dt>feature 2</dt>
-        <dd>no need to edit js if you change the number of dt/dd pairs</dd>
-        <dt>feature 3</dt>
-        <dd>description</dd>
-        <dt>feature 4</dt>
-        <dd>yadda</dd>        
+        <dt>good fallback</dt>
+        <dd>shows an unstyled dl if js disabled</dd>
+        <dt>easy to use</dt>
+        <dd>no need to edit js if you add/remove elements</dd>
+        <dt>variable list depth</dt>
+        <dd>dls can be nested 2 or 3 deep</dd>
       </dl>
     </dd>
     <dt>how to use</dt>
     <dd>instructions
       <dl>
         <dt><a href="#">offsite links</a></dt>
-        <dd>use an &lt;a&gt; tag like you did last century</dd>
+        <dd>use &lt;a&gt; tags like you did <a href="#">last century</a></dd>
         <dt>dl structure</dt>
-        <dd>mind the limitations!</dd>
-        <dt>constants</dt>
-        <dd>if you change the values of variables in SASS, change them in the JS too!</dd>
+        <dd>mind <a href="#">the</a> limitations!</dd>
+        <dt><a href="//mulletsgalore.com">mullets galore</a></dt>
+        <dd>too bad<br>you missed it</dd>
+
+        <dt>js and scss vars</dt>
+        <dd>Keep the values at the top of scss and js the same!</dd>
       </dl>
     </dd>
     <dt>limitations</dt>
+    
     <dd>
       <dl>
-        <dt>limitation 1</dt>
-        <dd>must be one and only one dd for each dt</dd>
-        <dt>limitation 2</dt>
+        <dt>1 to 1 dt:dd</dt>
+        <dd>must be one and only one dd per dt</dd>
+        <dt>max depth</dt>
         <dd>dls can be nested maximum 3 deep</dd>
-        <dt>limitation 3</dt>
-        <dd>overcame this!  there isn't one!</dd>
       </dl>
-    </dd>
-    <dt>leaf child node</dt>
-    <dd>
-      dls need not be nested 3 deep
     </dd>
     </dl>
   </dd>
